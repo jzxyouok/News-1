@@ -49,6 +49,7 @@ public class DetailFragment extends BaseBackFragment {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         initView(view);
 
+
         return view;
     }
 

@@ -3,14 +3,15 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_anim_veritical"
-        android:title="全局动画:竖向(默认)"
+        android:icon="@drawable/internet_news_reader_24px"
+        android:title="分享应用到QQ"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_anim_horizontal"
-        android:title="全局动画:横向"
+        android:title="分享应用到微博"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_anim_none"
-        android:title="全局动画:无"
+        android:title="分享应用到朋友圈"
         app:showAsAction="never"/>
 </menu>

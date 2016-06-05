@@ -1,16 +1,13 @@
 package com.example.dwight.myapplication.model;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by YoKeyword on 16/2/1.
  */
-public class Article {
+public class Article extends BmobObject {
     private String title;
     private String content;
-
-    public Article(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
 
     public String getTitle() {
         return title;

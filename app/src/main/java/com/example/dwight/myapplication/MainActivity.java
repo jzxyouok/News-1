@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.bmob.v3.Bmob;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
@@ -41,6 +42,7 @@ public class MainActivity extends SupportActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bmob.initialize(this, "dd4c63ac45326ba15f7b6ea5cfa5c648");
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {

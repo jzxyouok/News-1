@@ -17,9 +17,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.DefaultNoAnimator;
 import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
@@ -30,22 +37,13 @@ import com.example.dwight.myapplication.helper.OnItemClickListener;
 import com.example.dwight.myapplication.model.Article;
 import com.example.dwight.myapplication.ui.BaseMainFragment;
 
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
+import org.xmlpull.v1.XmlPullParserException;
+
 
 public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = "Fragmentation";
-
-    private String[] mTitles = new String[]{
-            "四川广元沉船船上人员名单确认 具体原因正调查",
-            "英媒：中国人工成本激增 越来越多日企迁至越南",
-            "习近平对谁提“情同手足”？"
-    };
-
-    private String[] mContents = new String[]{
-            "微博截图人员名单#四川游船沉没#[最新进展：船上人员名单确认]4日晚23时记者获悉，船上18人名单已确认。三名获救者分别是杨东（男，29岁）、秦欢（男，27岁）、王明星（男，30岁）。当地村民介绍，事发时白龙湖水域突遇强烈阵风，船体偏右、船头朝下倾覆。具体原因正在调查中，这是2006年以来四川最严重的水上交通事故。",
-            "日企担心中国经济放缓影响业绩。（资料图片）参考消息网6月5日报道英媒称，日本的最大航运公司正在越南投资12亿美元扩建一个集装箱码头，认定制造活动将从中国转向东南亚。据英国《金融时报》网站5月31日报道，在商船三井株式会社做出这一举动之前的三年里，随着中国的人工成本激增和中日两国争端造成不利影响，日本企业对\n",
-            "“情同手足”“肝胆相照”……习近平主席在6月3日下午的一场外事活动中用了以上词汇，这在中国对外交往中并不多见。习近平主席这场外事活动的客人到底是谁？为何习主席会说出这样的话呢？（2016年6月3日，国家主席习近平在北京人民大会堂同柬埔寨国王西哈莫尼举行会谈。这是会谈前，习近平在人民大会堂东门外广场为西哈莫"
-    };
-
     private Toolbar mToolbar;
 
     private FloatingActionButton mFab;
@@ -64,12 +62,38 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+       // initQuery();
         initView(view);
 
         return view;
     }
+//youwenti
+//    public void initQuery()
+//    {
+//        BmobQuery<Article> query = new BmobQuery<Article>();
+//        query.findObjects(this, new FindListener<Article>() {
+//            @Override
+//            public void onSuccess(List<Article> object) {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(_mActivity, "查询成功：共" + object.size() + "条数据。", Toast.LENGTH_SHORT).show();
+//                for (Article gameScore : object) {
+//                    //获得playerName的信息
+//                    gameScore.getTitle();
+//                    //获得数据的objectId信息
+//                    gameScore.getContent();
+//                    //获得createdAt数据创建时间（注意是：createdAt，不是createAt）
+//                    gameScore.getCreatedAt();
+//                }
+//            }
+//            @Override
+//            public void onError(int code, String msg) {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(_mActivity, "查询失败：" + msg, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     @Override
     protected FragmentAnimator onCreateFragmentAnimation() {
@@ -115,11 +139,11 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
 
         // Init Datas
         List<Article> articleList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            int index = (int) (Math.random() * 3);
-            Article article = new Article(mTitles[index], mContents[index]);
-            articleList.add(article);
-        }
+//        for (int i = 0; i < 20; i++) {
+//            int index = (int) (Math.random() * 3);
+//            Article article = new Article(mTitles[index], mContents[index]);
+//            articleList.add(article);
+//        }
         mAdapter.setDatas(articleList);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -176,5 +200,26 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
                 break;
         }
         return true;
+    }
+    public void  getSchoolNews() {
+
+        try {
+            String path = "http://www.xinhuanet.com/politics/news_politics.xml";
+            Toast.makeText(_mActivity, "请求中", Toast.LENGTH_SHORT).show();
+            HttpURLConnection con = (HttpURLConnection) new URL(path).openConnection();
+            con.setConnectTimeout(15000);
+            con.setRequestMethod("GET");
+            int i=con.getResponseCode();
+            Toast.makeText(_mActivity, i, Toast.LENGTH_SHORT).show();
+            if(i==200){
+                Toast.makeText(_mActivity, "请求成功", Toast.LENGTH_SHORT).show();
+                InputStream in = con.getInputStream();
+
+            }
+        }catch (Exception e){
+            Toast.makeText(_mActivity, "请求失败", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 }

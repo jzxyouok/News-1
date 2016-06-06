@@ -1,6 +1,8 @@
 package com.example.dwight.myapplication.ui.fragment.home;
 
 import android.os.Bundle;
+import android.os.NetworkOnMainThreadException;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,9 +38,12 @@ import com.example.dwight.myapplication.R;
 import com.example.dwight.myapplication.adapter.HomeAdapter;
 import com.example.dwight.myapplication.helper.OnItemClickListener;
 import com.example.dwight.myapplication.model.Article;
+import com.example.dwight.myapplication.model.article_demo;
 import com.example.dwight.myapplication.ui.BaseMainFragment;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -45,7 +51,7 @@ import org.xmlpull.v1.XmlPullParserException;
 public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = "Fragmentation";
     private Toolbar mToolbar;
-
+    public List<article_demo> articleList;
     private FloatingActionButton mFab;
     private RecyclerView mRecy;
     private HomeAdapter mAdapter;
@@ -57,43 +63,21 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-       // initQuery();
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
+        articleList = data();
         initView(view);
+
 
         return view;
     }
-//youwenti
-//    public void initQuery()
-//    {
-//        BmobQuery<Article> query = new BmobQuery<Article>();
-//        query.findObjects(this, new FindListener<Article>() {
-//            @Override
-//            public void onSuccess(List<Article> object) {
-//                // TODO Auto-generated method stub
-//                Toast.makeText(_mActivity, "查询成功：共" + object.size() + "条数据。", Toast.LENGTH_SHORT).show();
-//                for (Article gameScore : object) {
-//                    //获得playerName的信息
-//                    gameScore.getTitle();
-//                    //获得数据的objectId信息
-//                    gameScore.getContent();
-//                    //获得createdAt数据创建时间（注意是：createdAt，不是createAt）
-//                    gameScore.getCreatedAt();
-//                }
-//            }
-//            @Override
-//            public void onError(int code, String msg) {
-//                // TODO Auto-generated method stub
-//                Toast.makeText(_mActivity, "查询失败：" + msg, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 
     @Override
     protected FragmentAnimator onCreateFragmentAnimation() {
@@ -103,6 +87,29 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
         return new DefaultNoAnimator();
     }
 
+    private List<article_demo> data(){
+        final List <article_demo> list = new ArrayList<>();
+        BmobQuery <Article> query = new BmobQuery<Article>();
+        query.findObjects(this.getContext(), new FindListener<Article>() {
+            @Override
+
+            public void onSuccess(List<Article> object) {
+                // TODO Auto-generated method stub
+                Toast.makeText(_mActivity, "查询成功：共" + object.size() + "条数据。", Toast.LENGTH_SHORT).show();
+
+                for (Article gameScore : object) {
+                    list.add(new article_demo(gameScore.getTitle(),gameScore.getTitle()));
+                    //获得playerName的信息
+                }
+            }
+            @Override
+            public void onError(int code, String msg) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        return list;
+    }
     private void initView(View view) {
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mFab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -137,14 +144,13 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
             }
         });
 
-        // Init Datas
-        List<Article> articleList = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
-//            int index = (int) (Math.random() * 3);
-//            Article article = new Article(mTitles[index], mContents[index]);
-//            articleList.add(article);
-//        }
+
         mAdapter.setDatas(articleList);
+
+        // Init Datas
+
+
+
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,25 +207,5 @@ public class HomeFragment extends BaseMainFragment implements Toolbar.OnMenuItem
         }
         return true;
     }
-    public void  getSchoolNews() {
 
-        try {
-            String path = "http://www.xinhuanet.com/politics/news_politics.xml";
-            Toast.makeText(_mActivity, "请求中", Toast.LENGTH_SHORT).show();
-            HttpURLConnection con = (HttpURLConnection) new URL(path).openConnection();
-            con.setConnectTimeout(15000);
-            con.setRequestMethod("GET");
-            int i=con.getResponseCode();
-            Toast.makeText(_mActivity, i, Toast.LENGTH_SHORT).show();
-            if(i==200){
-                Toast.makeText(_mActivity, "请求成功", Toast.LENGTH_SHORT).show();
-                InputStream in = con.getInputStream();
-
-            }
-        }catch (Exception e){
-            Toast.makeText(_mActivity, "请求失败", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
 }

@@ -13,13 +13,14 @@ import java.util.List;
 import com.example.dwight.myapplication.R;
 import com.example.dwight.myapplication.helper.OnItemClickListener;
 import com.example.dwight.myapplication.model.Article;
+import com.example.dwight.myapplication.model.article_demo;
 
 /**
  * 主页HomeFragment  Adapter
  * Created by YoKeyword on 16/2/1.
  */
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
-    private List<Article> mItems = new ArrayList<>();
+    private List<article_demo> mItems = new ArrayList<>();
     private LayoutInflater mInflater;
 
     private OnItemClickListener mClickListener;
@@ -28,7 +29,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void setDatas(List<Article> items) {
+    public void setDatas(List<article_demo> items) {
         mItems.clear();
         mItems.addAll(items);
     }
@@ -51,7 +52,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Article item = mItems.get(position);
+        article_demo item = mItems.get(position);
         holder.tvTitle.setText(item.getTitle());
         holder.tvContent.setText(item.getContent());
     }
@@ -61,7 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         return mItems.size();
     }
 
-    public Article getItem(int position) {
+    public article_demo getItem(int position) {
         return mItems.get(position);
     }
 
